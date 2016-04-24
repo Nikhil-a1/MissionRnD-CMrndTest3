@@ -59,14 +59,7 @@ Difficulty : Medium +
 */
 #include <stdlib.h>
 #include <stdio.h>
-int size_of_tree(struct node* root);
-int size_of_tree(struct node* root)
-{
-	if (root == NULL)
-		return 0;
-	else
-		return 1 + size_of_tree(root->left) + size_of_tree(root->right);
-}
+
 struct node_dll{
 	int data;
 	struct node_dll *next;
@@ -77,6 +70,19 @@ struct node{
 	struct node *left;
 	struct node *right;
 };
+
+int size_of_tree(struct node* root, int);
+int size_of_tree(struct node* root, int node_count)
+{
+	if (root == NULL)
+		return 0;
+	else
+	{
+		node_count++;
+		size_of_tree(root->left, node_count);
+		size_of_tree(root->right, node_count);
+	}
+}
 int* bst_to_array(struct node* root,int* arr,int);
 
 int* bst_to_array(struct node* root,int* arr,int index)
@@ -98,8 +104,8 @@ int is_identical(struct node_dll *head, struct node *root)
 		return -1;
 	else
 	{
-		int size = 0, i = 0, flag = 0, index = 0;;
-		size = size_of_tree(root);
+		int size = 0, i = 0, flag = 0, index = 0;
+		size = size_of_tree(root,size);
 		int* arr = (int*)malloc(sizeof(int)*size);
 		arr = bst_to_array(root, arr,index);
 		while (i < size)
