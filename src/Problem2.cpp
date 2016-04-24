@@ -59,7 +59,14 @@ Difficulty : Medium +
 */
 #include <stdlib.h>
 #include <stdio.h>
-
+int size_of_tree(struct node* root);
+int size_of_tree(struct node* root)
+{
+	if (root == NULL)
+		return 0;
+	else
+		return 1 + size_of_tree(root->left) + size_of_tree(root->right);
+}
 struct node_dll{
 	int data;
 	struct node_dll *next;
@@ -70,7 +77,66 @@ struct node{
 	struct node *left;
 	struct node *right;
 };
+int* bst_to_array(struct node* root,int* arr,int);
 
-int is_identical(struct node_dll *head, struct node *root){
-	return -1;
+int* bst_to_array(struct node* root,int* arr,int index)
+{
+	if (root == NULL)
+		return arr;
+	else
+	{
+		bst_to_array(root->left, arr,index);
+		bst_to_array(root->right, arr, index);
+		arr[index] = root->data;
+		index++;
+	}
 }
+
+int is_identical(struct node_dll *head, struct node *root)
+{
+	if (head == NULL)
+		return -1;
+	else
+	{
+		int size = 0, i = 0, flag = 0, index = 0;;
+		size = size_of_tree(root);
+		int* arr = (int*)malloc(sizeof(int)*size);
+		arr = bst_to_array(root, arr,index);
+		while (i < size)
+		{
+			if (arr[i] == head->data)
+			{
+				flag = 1;
+				head = head->next;
+			}
+			else
+			{
+				flag = 0;
+				break;
+			}
+			i++;
+		}
+		return flag;
+	}
+}
+
+//void recursive_fun(struct node_dll* head, struct node* root, int* res)
+//{
+//	if (head == NULL)
+//		return;
+//	else
+//	{
+//		recursive_fun(head, root->left, res);
+//		recursive_fun(head, root->right, res);
+//		if (root->data == head->data)
+//		{
+//			*res = 1;
+//			head = head->next;
+//		}
+//		else
+//		{
+//			head = NULL;
+//			*res = 0;
+//		}
+//	}
+//}

@@ -58,22 +58,71 @@ struct enode{
 	struct enode *right;
 };
 
+
+int expression_tree(struct enode*);
 /*
 Helper Functions are optional to write 
 */
 //Helper Functions Start
-int isOperator(char *data){
+int isOperator(char *data)
+{
+	if (data[0] == '+' || data[0] == '-' || data[0] == '*')
+		return 1;
+	else
 	return 0;
 }
-int isOperand(char *data){
-	return 0;
+int isOperand(char *data)
+{  
+	if (data[0] != '+' && data[0] != '-' && data[0] != '*')
+		return 1;
+	else
+		return 0;
 }
 int getOperand(char *data){
 	//converts data string to an integer "123" => 123
-	return 0;
+	int i = 0, sum = 0;
+	if (*data != NULL)
+	{
+		while (data[i] != '\0')
+		{
+			sum = sum * 10 + (data[i] - '0');
+			i++;
+		}
+		return sum;
+	}
+	else
+	{
+		return 0;
+	}
 }
 //Helper Functions end
-int solve_tree(struct enode *root){
+int solve_tree(struct enode *root)
+{ if (root==NULL)
     return -1;
+else
+{
+	long int result = 0;
+	result = expression_tree(root);
+	return result;
+}
+}
+int expression_tree(struct enode* root)
+{
+	int left_value = 0, right_value = 0,result=0;
+	if (root == NULL)
+		return 0;
+  else if (isOperand(root->data) && root!=NULL)
+	{
+		return getOperand(root->data);
+	}
+  else if (isOperator(root->data) && root != NULL)
+	{
+		if (root->data[0] == '+')
+			return expression_tree(root->left) + expression_tree(root->right);
+		else if (root->data[0] == '-')
+			return expression_tree(root->left) - expression_tree(root->right);
+		else if (root->data[0] == '*')
+			return expression_tree(root->left) * expression_tree(root->right);
+	}
 }
 

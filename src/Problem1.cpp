@@ -50,7 +50,32 @@ struct node{
 	struct node *right;
 };
 
+ int recursive_fun(struct node*,  int);
 
-int get_missing_value(struct node *root,int n){
+int get_missing_value(struct node *root,int n)
+{ 
+	if (root==NULL)
     return -1;
+else
+{
+	 int sum = 0;
+	int res = 0;
+	sum = (n*(n + 1)) / 2;
+	res = recursive_fun(root, sum);
+	return res;
+}
+}
+
+int recursive_fun(struct node* root,  int sum)
+{
+	if (root == NULL)
+		return sum;
+	else
+	{
+		int result=0;
+		sum = sum - root->data;
+		sum = recursive_fun(root->left, sum);
+		sum = recursive_fun(root->right, sum);
+		return sum;
+	}
 }
